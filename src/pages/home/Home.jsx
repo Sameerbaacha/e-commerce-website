@@ -1,9 +1,10 @@
 import React from 'react'
-import HeroSection from '../../components/herosection/herosection'
+
 import Filter from '../../components/filter/Filter'
 import ProductCard from '../../components/productCard/ProductCard'
 import Track from '../../components/track/Track'
 import Testimonials from '../../components/testimonials/Testimonials'
+import HeroSection from '../../components/herosection/herosection'
 
 
 const Home = () => {
