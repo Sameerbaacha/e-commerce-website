@@ -1,5 +1,5 @@
 import React from 'react';
-import './hero.css'; // Import your CSS file
+import '../../App.css'
 
 function HeroSection() {
     return (
