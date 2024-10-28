@@ -1,16 +1,33 @@
-import React, { Fragment, useContext, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { MdDarkMode } from "react-icons/md";
 import { FiSun } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Mycontext } from '../../context/data/Mycontext'
 import { Dialog, Transition } from '@headlessui/react'
 import { RxCross2 } from 'react-icons/rx'
 import { useSelector } from 'react-redux';
+import { getAuth } from 'firebase/auth';
+
+
 
 const Navbar = () => {
     const { mode, toggleMode } = useContext(Mycontext);
     const [open, setOpen] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
+
+
+    const [picture, setPicture] = useState('https://www.shutterstock.com/image-vector/businessman-icon-260nw-564112600.jpg');
+
+    useEffect(() => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (user && user.photoURL) {
+            setPicture(user.photoURL);
+        }
+    }, [user]);
+    // console.log(picture)
+
+    const navigate = useNavigate();
 
     // console.log(user?.email);
 
@@ -19,7 +36,19 @@ const Navbar = () => {
         window.location.href = '/Login';
     };
 
-    const cartItems = useSelector((state) => state.cart);
+    // Access cart items from Redux store
+    const cartItems = useSelector((state) => state.cart.items || []);
+
+
+    const handleCartClick = () => {
+        if (!user) {
+            // Redirect to signup if the user is not logged in
+            navigate('/signup');
+        } else {
+            // Redirect to the cart page if logged in
+            navigate('/cart');
+        }
+    };
 
     return (
         <div className="bg-white sticky top-0 z-50  ">
@@ -84,7 +113,7 @@ const Navbar = () => {
                                         <Link to={'/'} className="-m-2 block p-2 font-medium text-gray-900 cursor-pointer">
                                             <img
                                                 className="inline-block w-10 h-10 rounded-full"
-                                                src="https://avatars.githubusercontent.com/u/153771689?s=400&u=0379902dc9375333068e599c58d9020f47b7778a&v=4"
+                                                src={picture}
                                                 alt="Dan_Abromov" />                                        </Link>
                                     </div>
                                 </div>
@@ -107,11 +136,9 @@ const Navbar = () => {
             </Transition.Root>
 
             <header className="relative bg-white">
-                <p className="flex h-10 items-center justify-center  bg-yellow-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8" >
-                    Get free delivery on orders over Rs 999
-                </p>
+               
 
-                <nav aria-label="Top" className="bg-gray-100 px-4 sm:px-6 lg:px-8 shadow-xl " style={{ backgroundColor: mode === 'dark' ? '#282c34' : '', color: mode === 'dark' ? 'white' : '', }}>
+                <nav aria-label="Top" className="bg-yellow-700 px-4 sm:px-6 lg:px-8 shadow-xl " style={{ backgroundColor: mode === 'dark' ? '#282c34' : '', color: mode === 'dark' ? 'white' : 'white', }}>
                     <div className="">
                         <div className="flex h-16 items-center">
                             <button
@@ -120,8 +147,8 @@ const Navbar = () => {
                                 onClick={() => setOpen(true)} style={{ backgroundColor: mode === 'dark' ? 'rgb(80 82 87)' : '', color: mode === 'dark' ? 'white' : '', }}
                             >
                                 <span className="sr-only">Open menu</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                                 </svg>
 
                             </button>
@@ -130,7 +157,7 @@ const Navbar = () => {
                             <div className="ml-4 flex lg:ml-0">
                                 <Link to={'/'} className='flex'>
                                     <div className="flex ">
-                                        <h1 className='  text-2xl font-bold text-black  px-2 py-1 rounded' style={{ color: mode === 'dark' ? 'white' : '', }}>Khushboo Mehal</h1>
+                                        <h1 className='  text-2xl font-bold text-yellow-700  px-2 py-1 rounded' style={{ color: mode === 'dark' ? 'white' : 'white', }}>Khushbo Mehal</h1>
                                     </div>
                                 </Link>
                             </div>
@@ -138,17 +165,17 @@ const Navbar = () => {
                             <div className="ml-auto flex items-center">
                                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
 
-                                    <Link to={'/allproducts'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : '', }}>
+                                    <Link to={'/allproducts'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : 'white', }}>
                                         All Products
                                     </Link>
-                                    {user ? <Link to={'/order'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : '', }}>
+                                    {user ? <Link to={'/order'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : 'white', }}>
                                         Order
                                     </Link> : ''}
-                                    {user?.email === 'sameerkhan@gmail.com' ? <Link to={'/dashboard'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : '', }}>
+                                    {user?.email === 'sameerkhan@gmail.com' ? <Link to={'/dashboard'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : 'white', }}>
                                         Admin
                                     </Link> : ''}
 
-                                    {user ? <a onClick={logout} className="m-2 block p-2 font-medium text-gray-900 cursor-pointer" style={{ color: mode === 'dark' ? 'white' : '', }}>
+                                    {user ? <a onClick={logout} className="m-2 block p-2 font-medium text-gray-900 cursor-pointer" style={{ color: mode === 'dark' ? 'white' : 'white', }}>
                                         Logout
                                     </a> : ''}
                                 </div>
@@ -160,14 +187,14 @@ const Navbar = () => {
                                             alt=""
                                             className="block h-auto w-5 flex-shrink-0"
                                         />
-                                        <span className="ml-3 block text-sm font-medium" style={{ color: mode === 'dark' ? 'white' : '', }}>PAK</span>
+                                        <span className="ml-3 block text-sm font-medium" style={{ color: mode === 'dark' ? 'white' : 'white', }}>PAK</span>
                                     </a>
                                 </div>
                                 <div className="hidden lg:ml-8 lg:flex">
                                     <a href="#" className="flex items-center text-gray-700 ">
                                         <img
                                             className="inline-block w-10 h-10 rounded-full"
-                                            src="https://avatars.githubusercontent.com/u/153771689?s=400&u=0379902dc9375333068e599c58d9020f47b7778a&v=4"
+                                            src={picture}
                                             alt="Dan_Abromov" />
                                     </a>
                                 </div>
@@ -186,14 +213,15 @@ const Navbar = () => {
 
                                 {/* Cart */}
                                 <div className="ml-4 flow-root lg:ml-6">
-                                    <Link to={'/cart'} className="group -m-2 flex items-center p-2" style={{ color: mode === 'dark' ? 'white' : '', }}>
+                                    <button onClick={handleCartClick} className="group -m-2 flex items-center p-2" style={{ color: mode === 'dark' ? 'white' : '' }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                                         </svg>
-
-                                        <span className="ml-2 text-sm font-medium text-gray-700 group-" style={{ color: mode === 'dark' ? 'white' : '', }}>{cartItems.length}</span>
+                                        <span className="ml-2 text-sm font-medium text-gray-700 group-" style={{ color: mode === 'dark' ? 'white' : 'white' }}>
+                                            {cartItems.length} {/* Display cart count */}
+                                        </span>
                                         <span className="sr-only">items in cart, view bag</span>
-                                    </Link>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -205,5 +233,3 @@ const Navbar = () => {
 }
 
 export default Navbar;
-
-// jb signup krte ho to login bhi hota h .aur user ko logout krne k baad user direct login page pr redirecr hojata h tb na user login hota h na hy admin

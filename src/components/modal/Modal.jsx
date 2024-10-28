@@ -1,11 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { toast } from 'react-toastify'; // Import toast
-import { addDoc, collection } from 'firebase/firestore'; // Firebase imports
+import { toast } from 'react-toastify';
+import { addDoc, collection } from 'firebase/firestore';
 import { fireDB } from '../../firebase/FirebaseConfig';
+import { getAuth } from 'firebase/auth'; // Import getAuth for user authentication
 
+const auth = getAuth();
 
-export default function Modal() {
+export default function Modal({ deleteCart }) {
     let [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -33,32 +35,44 @@ export default function Modal() {
         e.preventDefault();
         const { name, address, pincode, mobileNumber } = formData;
 
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            toast.error("Please log in to place an order.");
+            return;
+        }
+
         if (name && address && pincode && mobileNumber) {
             try {
                 const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-
                 if (cartItems.length === 0) {
                     toast.error('No items in the cart.');
                     return;
                 }
 
+                // Place orders for each item in the cart
                 for (let item of cartItems) {
-                    await addDoc(collection(fireDB,'orders'), {
+                    await addDoc(collection(fireDB, 'orders'), {
                         name,
                         address,
                         pincode,
                         mobileNumber,
+                        userId: currentUser.uid, // Add user ID from current user
+                        status: 'Pending',       // Set initial status to Pending
                         date: new Date().toLocaleString(),
-                        product: item.title, // Use product title from cart
-                        imageUrl: item.imageUrl // Use product image from cart
+                        product: item.title,
+                        imageUrl: item.imageUrl,
                     });
                 }
+
+                localStorage.removeItem('cart'); // Clear cart from localStorage
+                deleteCart(null, true); // Clear cart in UI
                 toast.success('Order Placed Successfully!');
                 setFormData({ name: '', address: '', pincode: '', mobileNumber: '' });
                 closeModal();
             } catch (error) {
                 toast.error('Order failed!');
-                console.error("Error placing order: ", error);
+                // console.error("Error placing order: ", error);
             }
         } else {
             toast.error('Please fill in all fields.');
@@ -158,7 +172,7 @@ export default function Modal() {
                                                         </div>
                                                     </form>
                                                     <button
-                                                        type="button" // Change to 'button' type to avoid form submit conflict
+                                                        type="button"
                                                         className="focus:outline-none w-full text-white bg-violet-600 hover:bg-violet-800 outline-0 font-medium rounded-lg text-sm px-5 py-2.5"
                                                         onClick={handleSubmit}
                                                     >

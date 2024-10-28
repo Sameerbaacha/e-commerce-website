@@ -7,31 +7,34 @@ import { auth } from '../../firebase/FirebaseConfig';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/authSlice';
+import { loadCart } from '../../redux/cartSlice';
 
 const Login = () => {
   const handleSignupClick = () => {
-    // Navigate to signup page
     window.location.href = '/signup';
   };
 
   const { loading, setloading } = useContext(Mycontext);
+
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const Login = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+  const handleLogin = async (event) => {
+    event.preventDefault();
     setloading(true);
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
-
-      // Check if user is an admin
+      // console.log(user)
       const isAdmin = user.email === 'sameerkhan@gmail.com';
-
-      // Store user and admin status in localStorage
       localStorage.setItem('user', JSON.stringify({ ...user, isAdmin }));
-
+      dispatch(loginSuccess({ uid: user.uid, email: user.email, isAdmin }));
+      // Load user-specific cart
+      dispatch(loadCart(user.uid)); // Load cart items for the logged-in user
       toast.success('Signin Successfully', {
         position: "top-right",
         autoClose: 2000,
@@ -43,11 +46,11 @@ const Login = () => {
         theme: "colored",
       });
 
-      navigate('/'); // Navigate to home or any other page after login
-      setloading(false);
+      navigate('/'); // Navigate to the home page
     } catch (error) {
-      console.log(error.message);
+      // console.error(error.message);
       toast.error('Failed to Login');
+    } finally {
       setloading(false);
     }
   };
@@ -68,7 +71,7 @@ const Login = () => {
         <Typography component="h1" variant="h4" sx={{ fontWeight: 'bold' }}>
           Login
         </Typography>
-        <Box component="form" noValidate onSubmit={Login} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={handleLogin} sx={{ mt: 3 }}>
           <TextField
             value={email}
             onChange={(e) => setemail(e.target.value)}

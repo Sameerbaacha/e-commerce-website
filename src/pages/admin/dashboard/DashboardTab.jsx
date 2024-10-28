@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 function DashboardTab() {
     const context = useContext(Mycontext)
-    const { mode, product, edithandle, deleteProduct, user } = context
+    const { mode, product, edithandle, deleteProduct, user, order,updateOrderStatus } = context
     // console.log(product)
     let [isOpen, setIsOpen] = useState(false)
 
@@ -142,91 +142,51 @@ function DashboardTab() {
                                 </div>
                             </div>
                         </TabPanel>
+
                         <TabPanel>
-                            {/* <Order order={order} setOrder={setOrder} setLoading={setLoading} /> */}
                             <div className="relative overflow-x-auto mb-16">
-                                <h1 className=' text-center mb-5 text-3xl font-semibold underline' style={{ color: mode === 'dark' ? 'white' : '' }}>Order Details</h1>
-                                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400" >
-                                    <thead className="text-xs text-black uppercase bg-gray-200 " style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
+                                <h1 className="text-center mb-5 text-3xl font-semibold underline" style={{ color: mode === 'dark' ? 'white' : '' }}>
+                                    Order Details
+                                </h1>
+                                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead className="text-xs text-black uppercase bg-gray-200">
                                         <tr>
-                                            <th scope="col" className="px-6 py-3">
-                                                Payment Id
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Image
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Title
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Price
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Category
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Name
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Address
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Pincode
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Phone Number
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Email
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Date
-                                            </th>
+                                            <th scope="col" className="px-6 py-3">Image</th>
+                                            <th scope="col" className="px-6 py-3">Name</th>
+                                            <th scope="col" className="px-8 py-3">Address</th>
+                                            <th scope="col" className="px-4 py-3">Pincode</th>
+                                            <th scope="col" className="px-6 py-3">Phone Number</th>
+                                            <th scope="col" className="px-10 py-3">Date</th>
+                                            <th scope="col" className="px-6 py-3">Status</th>
+                                            <th scope="col" className="px-8 py-3">Approval</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        <tr className="bg-gray-50 border-b  dark:border-gray-700" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                3393939
-                                            </td>
-                                            <th scope="row" className="px-6 py-4 font-medium text-black whitespace-nowrap">
-                                                <img className='w-16' src="https://dummyimage.com/720x400" alt="img" />
-                                            </th>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                Title
-                                            </td>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                ₹100
-                                            </td>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                pots
-                                            </td>
-
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                name
-                                            </td>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                india
-                                            </td>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                82828
-                                            </td>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                929929929929
-                                            </td>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                kkakka@gmail.com
-                                            </td>
-                                            <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                12 Aug 2019
-                                            </td>
-
-                                        </tr>
-
+                                        {order.map((item) => (
+                                            <tr key={item.id} className="bg-gray-50 border-b dark:border-gray-700">
+                                                <td className="px-6 py-4"><img className="w-16" src={item.imageUrl} alt="img" /></td>
+                                               
+                                                <td className="px-6 py-4">{item.name}</td>
+                                                <td className="px-6 py-4">{item.address}</td>
+                                                <td className="px-6 py-4">{item.pincode}</td>
+                                                <td className="px-6 py-4">{item.mobileNumber}</td>
+                                                <td className="px-6 py-4">{item.date}</td>
+                                                <td className="px-4 py-4 font-bold text-base">{item.status}</td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-col gap-2">
+                                                        <button onClick={() => updateOrderStatus(item.id, "Confirmed")} className="bg-green-500 text-xs hover:bg-green-700 text-white font-bold py-2  w-20 rounded cursor-pointer">
+                                                            Confirm
+                                                        </button>
+                                                        <button onClick={() => updateOrderStatus(item.id, "Cancelled")} className="bg-red-500 text-xs hover:bg-red-700 text-white font-bold py-2  w-20 rounded cursor-pointer">
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
-
                             </div>
                         </TabPanel>
                         <TabPanel>

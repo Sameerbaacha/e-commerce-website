@@ -3,24 +3,28 @@ import { Button, TextField, Typography, Container, Box, Avatar, Link } from '@mu
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Mycontext } from '../../context/data/Mycontext';
 import { toast } from 'react-toastify';
-import { auth, fireDB } from '../../firebase/FirebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, fireDB, googleProvider } from '../../firebase/FirebaseConfig';
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import Loader from '../../components/loader/Loader';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/authSlice';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { loadCart } from '../../redux/cartSlice';
 
 const SignupPage = () => {
-  const handleLoginClick = () => {
-    window.location.href = '/login';
-  };
-
   const { loading, setloading } = useContext(Mycontext);
+  // console.log(loading)
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize navigate
 
   const signup = async (e) => {
     e.preventDefault();
     setloading(true);
+
     if (name === '' || email === '' || password === '') {
       setloading(false);
       return toast.error('All fields are required');
@@ -35,23 +39,59 @@ const SignupPage = () => {
       };
       const userRef = collection(fireDB, "users");
       await addDoc(userRef, user);
-      toast.success('Signup Successful');
 
-      window.location.href = '/login'; // Navigate to the login page
-      
+      dispatch(loginSuccess({ email: user.email, isAdmin: false }));
+      toast.success('Signup Successful');
+      navigate('/login'); // Use navigate to redirect
+
       setname('');
       setemail('');
       setpassword('');
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       toast.error('Signup Failed');
     } finally {
       setloading(false);
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      setloading(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Define the admin condition based on the email
+      const isAdmin = user.email === 'sameerkhan@gmail.com';
+
+      // Dispatch login success and navigate
+      dispatch(loginSuccess({ uid: user.uid, email: user.email, isAdmin }));
+      toast.success('Google Signin Successfull', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });;
+
+      // Optionally, load user-specific cart or data if required
+      dispatch(loadCart(user.uid));
+
+      navigate('/'); // Navigate to the desired route after successful login
+    } catch (error) {
+      // console.log('Error Code:', error.code);
+      // console.log('Error Message:', error.message);
+      toast.error(`Google Sign-In Failed`);
+    } finally {
+      setloading(false);
+    }
+  };
+
   return (
-    <Container component="main" maxWidth="xs" sx={{ backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', padding: '40px', mt: 8 }}>
+    <Container component="main" maxWidth='xs' sx={{ backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', padding: '30px', mt: 2 }}>
       {loading && <Loader />}
       <Box
         sx={{
@@ -134,9 +174,37 @@ const SignupPage = () => {
           >
             Sign Up
           </Button>
+          <div
+            onClick={signInWithGoogle} // Add the onClick handler
+            style={{
+              backgroundColor: 'whitesmoke',
+              marginTop: '3px',
+              marginBottom: '2px',
+              padding: '10px',
+              borderRadius: '50px',
+              justifyContent: 'center',
+              fontSize: '1.1rem',
+              textTransform: 'none',
+              boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              color: 'black',
+              cursor: 'pointer'
+            }}
+          >
+            <img
+              src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
+              alt="Google Icon"
+              style={{ width: '32px', height: '28px', marginRight: '8px' }}
+            />
+            <span>Sign in with Google</span>
+          </div>
+
+
+
           <Typography variant="body2" align="center" sx={{ mt: 2 }}>
             {"Already have an account? "}
-            <Link href="#" onClick={handleLoginClick} sx={{ cursor: 'pointer', color: '#1976d2', textDecoration: 'underline' }}>
+            <Link href="#" onClick={() => navigate('/login')} sx={{ cursor: 'pointer', color: '#1976d2', textDecoration: 'underline' }}>
               Sign In
             </Link>
           </Typography>

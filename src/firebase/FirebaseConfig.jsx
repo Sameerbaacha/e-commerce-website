@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBm4Aei_P-WZS1fiHwlKD2AvHjawWELXyM",
-    authDomain: "ecommerce-app2k24.firebaseapp.com",
-    projectId: "ecommerce-app2k24",
-    storageBucket: "ecommerce-app2k24.appspot.com",
-    messagingSenderId: "740928581226",
-    appId: "1:740928581226:web:3c182b01254084f9f3a413"
+    apiKey: "AIzaSyAagehqY9nd1ZJkMUpgyEocSCIyB20hG-0",
+    authDomain: "e-commerce-2k25.firebaseapp.com",
+    projectId: "e-commerce-2k25",
+    storageBucket: "e-commerce-2k25.appspot.com",
+    messagingSenderId: "823640120286",
+    appId: "1:823640120286:web:b557d338831810ea525b4f"
 };
 
 // Initialize Firebase
@@ -16,5 +16,6 @@ const app = initializeApp(firebaseConfig);
 
 
 const fireDB = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 const auth = getAuth(app);
-export { auth, fireDB }
+export { auth, fireDB, googleProvider }
