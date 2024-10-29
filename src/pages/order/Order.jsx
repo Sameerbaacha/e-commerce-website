@@ -72,7 +72,7 @@ const Order = () => {
                                     </div>
                                     <Typography
                                         variant="body2"
-                                        className={`text-center border-t-4 pt-2 ${item.status === 'Confirmed' ? 'text-green-500' : 'text-red-500'}`}
+                                        className={`text-center border-t-4 pt-2 ${item.status === 'Delievered' ? 'text-green-700' : 'text-red-500'}`}
                                     >
                                     <strong style={{ color: mode === 'dark' ? 'white' : 'black' }}>Status:</strong> {item.status}
                                     </Typography>

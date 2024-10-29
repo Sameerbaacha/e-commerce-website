@@ -62,16 +62,14 @@ function Cart() {
         <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
           <div className="rounded-lg md:w-2/3">
             {cartItems.map((item, index) => {
-              const { title, price, imageUrl, description, quantity } = item; // Include quantity
+              const { title, price, imageUrl, quantity } = item; // Include quantity
               return (
                 <div key={index} className="justify-between mb-6 rounded-lg border drop-shadow-xl bg-white p-6 sm:flex sm:justify-start" style={{ backgroundColor: mode === 'dark' ? 'rgb(32 33 34)' : '', color: mode === 'dark' ? 'white' : '' }}>
                   <img src={imageUrl} alt="product-image" className="w-full rounded-lg sm:w-40" />
                   <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                    <div className="flex flex-col justify-between flex-grow h-full">
+                    <div className="flex flex-col justify-evenly pt-4 flex-grow h-full">
                       <h2 className="text-lg font-bold text-gray-900" style={{ color: mode === 'dark' ? 'white' : '' }}>{title}</h2>
-                      <h2 className="text-sm text-gray-900" style={{ color: mode === 'dark' ? 'white' : '' }}>{description}</h2>
-
-
+                      
                       {/* Desktop and Medium Devices: PKR line and delete button */}
                       <div className="hidden sm:flex items-center justify-between mt-4">
                         <p className="text-xl text-gray-700" style={{ color: mode === 'dark' ? 'white' : '' }}>

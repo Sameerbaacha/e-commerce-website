@@ -67,7 +67,7 @@ function Filter() {
                         setFilterPrice('');
                         setSearchKey('');
                     }} className="px-4 py-2 bg-gray-50 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-md"
-                        style={{ color: mode === 'dark' ? 'white' : '' }}>
+                        style={{ backgroundColor: mode === 'dark' ? 'rgb(64 66 70)' : '',color: mode === 'dark' ? 'white' : '' }}>
                         Reset Filter
                     </button>
                 </div>

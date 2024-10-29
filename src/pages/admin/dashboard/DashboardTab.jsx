@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 function DashboardTab() {
     const context = useContext(Mycontext)
     const { mode, product, editHandle, deleteProduct, user, order, updateOrderStatus } = context
-    // console.log(product)
+  
     let [isOpen, setIsOpen] = useState(false)
 
     function closeModal() {
@@ -175,7 +175,7 @@ function DashboardTab() {
                                                 <td className="px-4 py-4 font-bold text-base">{item.status}</td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex flex-col gap-2">
-                                                        <button onClick={() => updateOrderStatus(item.id, "Confirmed")} className="bg-green-500 text-xs hover:bg-green-700 text-white font-bold py-2  w-20 rounded cursor-pointer">
+                                                        <button onClick={() => updateOrderStatus(item.id, "Delievered")} className="bg-green-500 text-xs hover:bg-green-700 text-white font-bold py-2  w-20 rounded cursor-pointer">
                                                             Confirm
                                                         </button>
                                                         <button onClick={() => updateOrderStatus(item.id, "Cancelled")} className="bg-red-500 text-xs hover:bg-red-700 text-white font-bold py-2  w-20 rounded cursor-pointer">
