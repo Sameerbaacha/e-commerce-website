@@ -62,7 +62,7 @@ const SignupPage = () => {
       const user = result.user;
 
       // Define the admin condition based on the email
-      const isAdmin = user.email === 'sameerkhan@gmail.com';
+      const isAdmin = user.email === 'sameeris6512@gmail.com';
 
       // Dispatch login success and navigate
       dispatch(loginSuccess({ uid: user.uid, email: user.email, isAdmin }));

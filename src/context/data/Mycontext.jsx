@@ -19,7 +19,7 @@ const MycontextProvider = ({ children }) => {
     };
 
     const [loading, setloading] = useState(false);
-    const [products, setProducts] = useState({
+    const [products, setproducts] = useState({
         title: null,
         price: null,
         imageUrl: null,
@@ -43,6 +43,7 @@ const MycontextProvider = ({ children }) => {
         try {
             const productRef = collection(fireDB, 'products');
             await addDoc(productRef, products);
+            // console.log(products)
             toast.success('Product Added Successfully');
 
             setTimeout(() => {
@@ -113,15 +114,17 @@ const MycontextProvider = ({ children }) => {
         fetchUsers();
     }, []); // Only fetch users once on mount
 
+
     // Update product function
     const editHandle = (item) => {
-        setProducts(item);
+        setproducts(item);
     };
-
     // Update product
     const updateProduct = async (item) => {
+
         setloading(true);
         try {
+            // console.log(products)
             await setDoc(doc(fireDB, "products", products.id), products);
             toast.success("Product Updated successfully");
 
@@ -130,12 +133,12 @@ const MycontextProvider = ({ children }) => {
                 window.location.href = '/dashboard';
             }, 1000);
         } catch (error) {
-            // console.error(error);
-            toast('error updating product')
+            // console.error("Error updating product:", error);
+            toast.error("Error updating product:"); // Provide more context
         } finally {
             setloading(false);
         }
-        setProducts("");
+        setproducts("");
     };
 
     const deleteProduct = async (item) => {
@@ -222,7 +225,7 @@ const MycontextProvider = ({ children }) => {
 
     return (
         <Mycontext.Provider value={{
-            mode, toggleMode, loading, setloading, products, setProducts, addProduct, updateOrderStatus, product, editHandle, updateProduct, deleteProduct, order, user, searchKey, setSearchKey, filterType, setFilterType,
+            mode, toggleMode, loading, setloading, products, setproducts, addProduct, updateOrderStatus, product, editHandle, updateProduct, deleteProduct, order, user, searchKey, setSearchKey, filterType, setFilterType,
             filterPrice, setFilterPrice, currentUser, addOrder
         }}>
             {children}

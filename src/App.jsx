@@ -35,7 +35,7 @@ export const ProtectedRoute = ({ children }) => {
 
 export const ProtectedRoutesForAdmin = ({ children }) => {
   const user = JSON.parse(localStorage.getItem('user'));
-  console.log("Protected Route user:", user);
+  // console.log("Protected Route user:", user);
   if (user && user.isAdmin) {
     return children;
   } else {

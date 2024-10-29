@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 function DashboardTab() {
     const context = useContext(Mycontext)
-    const { mode, product, edithandle, deleteProduct, user, order,updateOrderStatus } = context
+    const { mode, product, editHandle, deleteProduct, user, order, updateOrderStatus } = context
     // console.log(product)
     let [isOpen, setIsOpen] = useState(false)
 
@@ -64,7 +64,7 @@ function DashboardTab() {
                                         </div></button>
                                 </div>
                                 <div className="relative overflow-x-auto ">
-                                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400  ">
+                                    <table  className="w-full text-sm text-left text-gray-500 dark:text-gray-400  ">
                                         <thead className="text-xs border border-gray-600 text-black uppercase bg-gray-200 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)]" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
                                             <tr>
                                                 <th scope="col" className="px-6 py-3">
@@ -92,10 +92,10 @@ function DashboardTab() {
                                         </thead>
 
                                         {product.map((item, index) => {
-                                            const { title, price, imageUrl, category, description, date } = item;
+                                            const { title, price, imageUrl, category, date } = item;
                                             return (
-                                                <tbody className=''>
-                                                    <tr className="bg-gray-50 border-b  dark:border-gray-700" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
+                                                <tbody key={item.id}  >
+                                                    <tr  className="bg-gray-50 border-b  dark:border-gray-700" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
                                                         <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
                                                             {index + 1}
                                                         </td>
@@ -123,7 +123,7 @@ function DashboardTab() {
                                                                         </svg>
                                                                     </div>
                                                                     <Link to={'/updateproduct'}>
-                                                                        <div onClick={() => edithandle(item)} >
+                                                                        <div onClick={() => editHandle(item)} >
                                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                                             </svg>
@@ -166,7 +166,7 @@ function DashboardTab() {
                                         {order.map((item) => (
                                             <tr key={item.id} className="bg-gray-50 border-b dark:border-gray-700">
                                                 <td className="px-6 py-4"><img className="w-16" src={item.imageUrl} alt="img" /></td>
-                                               
+
                                                 <td className="px-6 py-4">{item.name}</td>
                                                 <td className="px-6 py-4">{item.address}</td>
                                                 <td className="px-6 py-4">{item.pincode}</td>

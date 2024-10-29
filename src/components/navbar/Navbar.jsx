@@ -98,7 +98,7 @@ const Navbar = () => {
                                                 <Link to={'/order'} className="block text-sm font-medium text-gray-900" style={{ color: mode === 'dark' ? 'white' : '', }}>
                                                     Order
                                                 </Link>
-                                                {user.email === 'sameerkhan@gmail.com' && (
+                                                {user.email === 'sameeris6512@gmail.com' && (
                                                     <Link to={'/dashboard'} className="block text-sm font-medium text-gray-700" style={{ color: mode === 'dark' ? 'white' : '', }}>
                                                         Admin
                                                     </Link>
@@ -171,7 +171,7 @@ const Navbar = () => {
                                     {user ? <Link to={'/order'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : 'white', }}>
                                         Order
                                     </Link> : ''}
-                                    {user?.email === 'sameerkhan@gmail.com' ? <Link to={'/dashboard'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : 'white', }}>
+                                    {user?.email === 'sameeris6512@gmail.com' ? <Link to={'/dashboard'} className="text-sm font-medium text-gray-700 " style={{ color: mode === 'dark' ? 'white' : 'white', }}>
                                         Admin
                                     </Link> : ''}
 

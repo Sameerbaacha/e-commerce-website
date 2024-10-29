@@ -30,7 +30,7 @@ const Login = () => {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
       // console.log(user)
-      const isAdmin = user.email === 'sameerkhan@gmail.com';
+      const isAdmin = user.email === 'sameeris6512@gmail.com';
       localStorage.setItem('user', JSON.stringify({ ...user, isAdmin }));
       dispatch(loginSuccess({ uid: user.uid, email: user.email, isAdmin }));
       // Load user-specific cart
