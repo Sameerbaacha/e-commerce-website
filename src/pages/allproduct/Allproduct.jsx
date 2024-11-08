@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Mycontext } from '../../context/data/Mycontext';
 import { addToCart } from '../../redux/cartSlice';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Allproduct = () => {
   const context = useContext(Mycontext);
@@ -12,11 +13,14 @@ const Allproduct = () => {
   const cartItems = useSelector((state) => state.cart.items); // Get cart items
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Check if user is authenticated
   const user = useSelector((state) => state.auth.user); // Get the logged-in user
+  const navigate = useNavigate();
+
 
   // Add to cart
   const addCart = (product) => {
     if (!isAuthenticated) {
-      toast.error('Please Sign Up or Login to add items to the cart.');
+      toast.error('Please Signup or Login to add items to the cart.');
+      navigate('/signup'); // Redirect to signup if not logged in
       return;
     }
 
